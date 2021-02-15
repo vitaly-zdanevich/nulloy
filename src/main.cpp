@@ -90,6 +90,9 @@ void messageHandler(QtMsgType type, const QMessageLogContext &context, const QSt
 
 int main(int argc, char *argv[])
 {
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling,true);
+    QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+
     // for Qt core plugins
 #if defined(Q_OS_WIN)
     QCoreApplication::addLibraryPath(QFileInfo(argv[0]).dir().path() + "/Plugins/");

@@ -124,7 +124,7 @@
 }
 
 #iconLabel {
-	border-image: url(icon.png);
+	border-image: url(icon.svg);
 }
 
 #segmentWrapper,

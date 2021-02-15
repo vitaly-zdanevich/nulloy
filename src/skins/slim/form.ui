@@ -99,6 +99,8 @@ NTrackInfoWidget #MiddleCenter {
 
 #iconLabel {
 	background-image: url(icon.png);
+    width: 64px;
+    height:64px;
 }
 
 QToolButton {
@@ -128,7 +130,7 @@ QToolButton {
 	background-image: url(stop-press.png);
 }
 #playButton {
-	background-image: url(play.png);
+	background-image: url(play.svg);
 }
 #playButton:hover {
 	background-image: url(play-hover.png);
@@ -518,13 +520,13 @@ QToolButton {
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>27</width>
+                 <width>28</width>
                  <height>0</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>27</width>
+                 <width>28</width>
                  <height>16777215</height>
                 </size>
                </property>

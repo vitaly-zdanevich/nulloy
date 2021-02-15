@@ -68,11 +68,7 @@ NAboutDialog::NAboutDialog(QWidget *parent) : QDialog(parent)
     aboutTab->setLayout(aboutTabLayout);
 
     QLabel *iconLabel = new QLabel;
-    QPixmap pixmap(":icon-96.png");
-    iconLabel->setPixmap(pixmap);
-#ifdef Q_OS_MAC
-    iconLabel->setMask(pixmap.mask());
-#endif
+    iconLabel->setStyleSheet("min-height: 96px; min-width: 96px; image: url(:icon.svg);");
 
     QHBoxLayout *iconLayout = new QHBoxLayout;
     iconLayout->addStretch();
