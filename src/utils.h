@@ -13,13 +13,14 @@
 **
 *********************************************************************/
 
-#ifndef N_TAGLIB_FILE_REF_H
-#define N_TAGLIB_FILE_REF_H
+#ifndef N_UTILS_H
+#define N_UTILS_H
 
-namespace NTaglib
+#include "playlistDataItem.h"
+
+namespace NUtils
 {
-    extern TagLib::FileRef *_tagRef;
-    extern QString _filePath;
-} // namespace NTaglib
+    QList<NPlaylistDataItem> dirListRecursive(const QString &path);
+} // namespace NUtils
 
 #endif

@@ -1,6 +1,6 @@
 /********************************************************************
 **  Nulloy Music Player, http://nulloy.com
-**  Copyright (C) 2010-2018 Sergey Vlasov <sergey@vlasov.me>
+**  Copyright (C) 2010-2022 Sergey Vlasov <sergey@vlasov.me>
 **
 **  This program can be distributed under the terms of the GNU
 **  General Public License version 3.0 as published by the Free
@@ -26,6 +26,11 @@ function Main()
         PlaybackEngine["stateChanged(N::PlaybackState)"].connect(this, "on_stateChanged");
 
         Ui.mainWindow["fullScreenEnabled(bool)"].connect(this, "on_fullScreenEnabled");
+        Ui.mainWindow["showPlaybackControlsEnabled(bool)"].connect(this, "on_showPlaybackControlsEnabled");
+
+        if (!Settings.value("NativeSkin/Splitter")) {
+            Settings.setValue("NativeSkin/Splitter", [200, 200]);
+        }
 
         Ui.splitter["splitterMoved(int, int)"].connect(this, "on_splitterMoved");
 
@@ -71,13 +76,16 @@ function Main()
 
 Main.prototype.afterShow = function()
 {
-    if (Settings.value("NativeSkin/Splitter"))
-        Ui.splitter.setSizes(Settings.value("NativeSkin/Splitter"));
+    Ui.splitter.setSizes(Settings.value("NativeSkin/Splitter"));
 }
 
 Main.prototype.on_splitterMoved = function(pos, index)
 {
-    Settings.setValue("NativeSkin/Splitter", Ui.splitter.sizes());
+    if (Ui.mainWindow.isFullSceen()) {
+        Settings.setValue("NativeSkin/SplitterFullScreen", Ui.splitter.sizes());
+    } else {
+        Settings.setValue("NativeSkin/Splitter", Ui.splitter.sizes());
+    }
 }
 
 Main.prototype.on_stateChanged = function(state)
@@ -90,6 +98,20 @@ Main.prototype.on_stateChanged = function(state)
 
 Main.prototype.on_fullScreenEnabled = function(enabled)
 {
-    Ui.controlsContainer.setVisible(!enabled);
-    Ui.playlistContainer.setVisible(!enabled);
+    if (enabled) {
+        Ui.splitter.setSizes(Settings.value("NativeSkin/SplitterFullScreen"));
+    } else {
+        Ui.splitter.setSizes(Settings.value("NativeSkin/Splitter"));
+    }
+
+    if (Settings.value("ShowPlaybackControls")) {
+        Ui.controlsContainer.setVisible(!enabled);
+    }
+}
+
+Main.prototype.on_showPlaybackControlsEnabled = function(enabled)
+{
+    if (!Ui.mainWindow.isFullSceen()) {
+        Ui.controlsContainer.setVisible(enabled);
+    }
 }

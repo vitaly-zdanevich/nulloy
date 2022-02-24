@@ -1,6 +1,6 @@
 /********************************************************************
 **  Nulloy Music Player, http://nulloy.com
-**  Copyright (C) 2010-2018 Sergey Vlasov <sergey@vlasov.me>
+**  Copyright (C) 2010-2022 Sergey Vlasov <sergey@vlasov.me>
 **
 **  This program can be distributed under the terms of the GNU
 **  General Public License version 3.0 as published by the Free
@@ -14,13 +14,13 @@
 *********************************************************************/
 
 #include "containerVlc.h"
+
 #include "playbackEngineVlc.h"
 #include "waveformBuilderVlc.h"
 
 NContainerVlc::NContainerVlc(QObject *parent) : QObject(parent)
 {
-    m_plugins << new NPlaybackEngineVlc()
-              << new NWaveformBuilderVlc();
+    m_plugins << new NPlaybackEngineVlc() << new NWaveformBuilderVlc();
 }
 
 NContainerVlc::~NContainerVlc()

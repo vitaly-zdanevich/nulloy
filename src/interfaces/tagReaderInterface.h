@@ -1,6 +1,6 @@
 /********************************************************************
 **  Nulloy Music Player, http://nulloy.com
-**  Copyright (C) 2010-2018 Sergey Vlasov <sergey@vlasov.me>
+**  Copyright (C) 2010-2022 Sergey Vlasov <sergey@vlasov.me>
 **
 **  This program can be distributed under the terms of the GNU
 **  General Public License version 3.0 as published by the Free
@@ -20,7 +20,7 @@
 
 class QString;
 
-#define TAGREADER_INTERFACE "Nulloy/NTagReaderInterface/0.7"
+#define TAGREADER_INTERFACE "Nulloy/NTagReaderInterface/0.9"
 
 class NTagReaderInterface : public QObject
 {
@@ -30,13 +30,10 @@ public:
 
     static QString interfaceString() { return TAGREADER_INTERFACE; }
 
-    virtual QString getSource() = 0;
-    virtual void setSource(const QString &file) = 0;
-    virtual QString toString(const QString &format, const QString &encoding = QString("UTF-8")) const = 0;
-    virtual bool isValid() const = 0;
+    virtual QString toString(const QString &file, const QString &format,
+                             const QString &encoding = QString("UTF-8")) = 0;
 };
 
 Q_DECLARE_INTERFACE(NTagReaderInterface, TAGREADER_INTERFACE)
 
 #endif
-

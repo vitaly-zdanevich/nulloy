@@ -1,6 +1,6 @@
 /********************************************************************
 **  Nulloy Music Player, http://nulloy.com
-**  Copyright (C) 2010-2018 Sergey Vlasov <sergey@vlasov.me>
+**  Copyright (C) 2010-2022 Sergey Vlasov <sergey@vlasov.me>
 **
 **  This program can be distributed under the terms of the GNU
 **  General Public License version 3.0 as published by the Free
@@ -66,6 +66,8 @@ public:
     Q_INVOKABLE void setFramelessShadow(bool enabled);
 #endif
 
+    Q_INVOKABLE bool isFullSceen();
+
 public slots:
     void loadSettings();
     void saveSettings();
@@ -74,7 +76,8 @@ public slots:
     void toggleFullScreen();
     void setTitle(QString title);
     void setOnTop(bool onTop);
-    void reject() {};
+    void showPlaybackControls(bool enable);
+    void reject(){};
 
 signals:
     void closed();
@@ -84,7 +87,7 @@ signals:
     void maximizeEnabled(bool enabled);
     void focusChanged(bool focused);
     void scrolled(int delta);
+    void showPlaybackControlsEnabled(bool enabled);
 };
 
 #endif
-

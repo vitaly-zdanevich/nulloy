@@ -1,6 +1,6 @@
 /********************************************************************
 **  Nulloy Music Player, http://nulloy.com
-**  Copyright (C) 2010-2018 Sergey Vlasov <sergey@vlasov.me>
+**  Copyright (C) 2010-2022 Sergey Vlasov <sergey@vlasov.me>
 **
 **  This program can be distributed under the terms of the GNU
 **  General Public License version 3.0 as published by the Free
@@ -14,22 +14,26 @@
 *********************************************************************/
 
 #include "playlistWidgetItem.h"
-#include "playlistWidget.h"
-#include "global.h"
 
-#include <QPainter>
 #include <QFileInfo>
+#include <QPainter>
+
+#include "global.h"
+#include "playlistWidget.h"
 
 NPlaylistWidgetItem::NPlaylistWidgetItem(QListWidget *parent) : QListWidgetItem(parent) {}
 
-NPlaylistWidgetItem::NPlaylistWidgetItem(const QFileInfo &fileinfo, QListWidget *parent) : QListWidgetItem(parent)
+NPlaylistWidgetItem::NPlaylistWidgetItem(const QFileInfo &fileinfo, QListWidget *parent)
+    : QListWidgetItem(parent)
 {
     m_data.path = fileinfo.filePath();
 }
 
-NPlaylistWidgetItem::NPlaylistWidgetItem(const NPlaylistDataItem &dataItem, QListWidget *parent) : QListWidgetItem(parent)
+NPlaylistWidgetItem::NPlaylistWidgetItem(const NPlaylistDataItem &dataItem, QListWidget *parent)
+    : QListWidgetItem(parent)
 {
     m_data = dataItem;
+    setText(m_data.title);
 }
 
 QVariant NPlaylistWidgetItem::data(int role) const
@@ -84,9 +88,8 @@ NPlaylistDataItem NPlaylistWidgetItem::dataItem() const
     return m_data;
 }
 
-void NPlaylistWidgetItemDelegate::paint(QPainter *painter,
-                                  const QStyleOptionViewItem &option,
-                                  const QModelIndex &index) const
+void NPlaylistWidgetItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
+                                        const QModelIndex &index) const
 {
     QStyleOptionViewItem opt = option;
     const NPlaylistWidget *playlistWidget = qobject_cast<const NPlaylistWidget *>(opt.widget);
@@ -107,4 +110,3 @@ void NPlaylistWidgetItemDelegate::paint(QPainter *painter,
 
     QStyledItemDelegate::paint(painter, opt, index);
 }
-

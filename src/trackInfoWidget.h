@@ -1,6 +1,6 @@
 /********************************************************************
 **  Nulloy Music Player, http://nulloy.com
-**  Copyright (C) 2010-2018 Sergey Vlasov <sergey@vlasov.me>
+**  Copyright (C) 2010-2022 Sergey Vlasov <sergey@vlasov.me>
 **
 **  This program can be distributed under the terms of the GNU
 **  General Public License version 3.0 as published by the Free
@@ -31,11 +31,12 @@ private:
     qint64 m_msec;
     int m_heightThreshold;
     QString m_tooltipFormat;
-    QMap <NLabel *, QString> m_staticFormatsMap;
-    QMap <NLabel *, QString> m_dynamicFormatsMap;
+    QMap<NLabel *, QString> m_staticFormatsMap;
+    QMap<NLabel *, QString> m_dynamicFormatsMap;
     QGraphicsOpacityEffect *m_effect;
     QPropertyAnimation *m_animation;
     QWidget *m_container;
+    int m_trackDurationSec;
 
     bool event(QEvent *event);
     void enterEvent(QEvent *event);
@@ -48,7 +49,7 @@ public:
     ~NTrackInfoWidget();
 
 public slots:
-    void updateStaticTags();
+    void updateStaticTags(const QString &file);
     void loadSettings();
     void tick(qint64 msec);
 
@@ -57,4 +58,3 @@ private slots:
 };
 
 #endif
-

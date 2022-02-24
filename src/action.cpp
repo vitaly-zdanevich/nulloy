@@ -1,6 +1,6 @@
 /********************************************************************
 **  Nulloy Music Player, http://nulloy.com
-**  Copyright (C) 2010-2018 Sergey Vlasov <sergey@vlasov.me>
+**  Copyright (C) 2010-2022 Sergey Vlasov <sergey@vlasov.me>
 **
 **  This program can be distributed under the terms of the GNU
 **  General Public License version 3.0 as published by the Free
@@ -38,8 +38,9 @@ QList<QKeySequence> NAction::globalShortcuts()
 void NAction::setGlobalShortcut(const QKeySequence &shortcut)
 {
     QList<QKeySequence> list;
-    if (!shortcut.isEmpty())
+    if (!shortcut.isEmpty()) {
         list << shortcut;
+    }
     setGlobalShortcuts(list);
 }
 
@@ -61,4 +62,3 @@ void NAction::setGlobalShortcuts(const QList<QKeySequence> &shortcuts)
         m_globalShortcuts << s;
     }
 }
-

@@ -13,13 +13,14 @@
 **
 *********************************************************************/
 
-#ifndef N_TAGLIB_FILE_REF_H
-#define N_TAGLIB_FILE_REF_H
+#ifndef N_XCB_H
+#define N_XCB_H
 
-namespace NTaglib
+#include <QString>
+
+namespace NXcb
 {
-    extern TagLib::FileRef *_tagRef;
-    extern QString _filePath;
-} // namespace NTaglib
+    QString wmName();
+}
 
 #endif

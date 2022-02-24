@@ -1,6 +1,6 @@
 /********************************************************************
 **  Nulloy Music Player, http://nulloy.com
-**  Copyright (C) 2010-2018 Sergey Vlasov <sergey@vlasov.me>
+**  Copyright (C) 2010-2022 Sergey Vlasov <sergey@vlasov.me>
 **
 **  This program can be distributed under the terms of the GNU
 **  General Public License version 3.0 as published by the Free
@@ -34,7 +34,7 @@ private:
 public:
     NSettings(QObject *parent = 0);
     ~NSettings();
-    static NSettings* instance();
+    static NSettings *instance();
 
     void initShortcuts(QObject *instance);
     void saveShortcuts();
@@ -50,4 +50,3 @@ signals:
 };
 
 #endif
-

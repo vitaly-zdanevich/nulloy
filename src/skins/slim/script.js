@@ -1,6 +1,6 @@
 /********************************************************************
 **  Nulloy Music Player, http://nulloy.com
-**  Copyright (C) 2010-2018 Sergey Vlasov <sergey@vlasov.me>
+**  Copyright (C) 2010-2022 Sergey Vlasov <sergey@vlasov.me>
 **
 **  This skin package including all images, cascading style sheets,
 **  UI forms, and JavaScript files are released under
@@ -23,10 +23,19 @@ function Main()
 
         Ui.mainWindow["newTitle(const QString &)"].connect(this, "setTitle");
         Ui.mainWindow["fullScreenEnabled(bool)"].connect(this, "on_fullScreenEnabled");
+        Ui.mainWindow["showPlaybackControlsEnabled(bool)"].connect(this, "on_showPlaybackControlsEnabled");
         Ui.mainWindow["maximizeEnabled(bool)"].connect(this, "on_maximizeEnabled");
 
         Ui.mainWindow.windowFlags = (Ui.mainWindow.windowFlags | Qt.FramelessWindowHint | Qt.WindowCloseButtonHint) ^ (Qt.WindowTitleHint | Qt.Dialog);
         Ui.waveformSlider.minimumHeight = 30;
+
+        if (!Settings.value("SlimSkin/Splitter")) {
+            Settings.setValue("SlimSkin/Splitter", [30, 30]);
+        }
+
+        if (!Settings.value("SlimSkin/SplitterFullScreen")) {
+            Settings.setValue("SlimSkin/SplitterFullScreen", [999999, 0]);
+        }
 
         if (Q_WS == "mac") {
             Ui.mainWindow.setAttribute(Qt.WA_MacBrushedMetal, true);
@@ -40,6 +49,14 @@ function Main()
             Ui.titleWidget.layout().insertWidget(10, Ui.menuButton);
             Ui.titleWidget.layout().insertWidget(10, Ui.iconLabel);
         }
+
+        this.undecoratedSpacing_ = 4;
+        Ui.borderWidget.layout().insertSpacing(1, 0);
+
+        if (WS_WM_TILING) {
+            Ui.titleWidget.setVisible(false);
+            Ui.borderWidget.layout().setSpacingAt(1, this.undecoratedSpacing_);
+        }
     } catch (err) {
         print("QtScript: " + err);
     }
@@ -47,10 +64,7 @@ function Main()
 
 Main.prototype.afterShow = function()
 {
-    if (Settings.value("SlimSkin/Splitter"))
-        Ui.splitter.setSizes(Settings.value("SlimSkin/Splitter"));
-    else
-        Ui.splitter.setSizes([30, 0]);
+    Ui.splitter.setSizes(Settings.value("SlimSkin/Splitter"));
 
     Ui.menuButton["clicked()"].connect(this, "showMenu");
 }
@@ -64,7 +78,11 @@ Main.prototype.showMenu = function()
 
 Main.prototype.on_splitterMoved = function(pos, index)
 {
-    Settings.setValue("SlimSkin/Splitter", Ui.splitter.sizes());
+    if (Ui.mainWindow.isFullSceen()) {
+        Settings.setValue("SlimSkin/SplitterFullScreen", Ui.splitter.sizes());
+    } else {
+        Settings.setValue("SlimSkin/Splitter", Ui.splitter.sizes());
+    }
 }
 
 Main.prototype.setTitle = function(title)
@@ -83,11 +101,28 @@ Main.prototype.on_stateChanged = function(state)
 
 Main.prototype.on_fullScreenEnabled = function(enabled)
 {
-    Ui.controlsContainer.setVisible(!enabled);
+    if (enabled) {
+        Ui.splitter.setSizes(Settings.value("SlimSkin/SplitterFullScreen"));
+    } else {
+        Ui.splitter.setSizes(Settings.value("SlimSkin/Splitter"));
+    }
+
+    if (Settings.value("ShowPlaybackControls")) {
+        Ui.controlsContainer.setVisible(!enabled);
+    }
+
     Ui.titleWidget.setVisible(!enabled);
-    Ui.playlistWidget.setVisible(!enabled);
+
+    Ui.borderWidget.layout().setSpacingAt(1, enabled ? this.undecoratedSpacing_ : 0);
 
     this.setBorderVisible(!enabled);
+}
+
+Main.prototype.on_showPlaybackControlsEnabled = function(enabled)
+{
+    if (!Ui.mainWindow.isFullSceen()) {
+        Ui.controlsContainer.setVisible(enabled);
+    }
 }
 
 Main.prototype.on_maximizeEnabled = function(enabled)

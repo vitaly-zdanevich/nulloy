@@ -1,6 +1,6 @@
 /********************************************************************
 **  Nulloy Music Player, http://nulloy.com
-**  Copyright (C) 2010-2018 Sergey Vlasov <sergey@vlasov.me>
+**  Copyright (C) 2010-2022 Sergey Vlasov <sergey@vlasov.me>
 **
 **  This program can be distributed under the terms of the GNU
 **  General Public License version 3.0 as published by the Free
@@ -15,23 +15,22 @@
 
 #include "settings.h"
 
-#include "common.h"
-
-#include "action.h"
-
 #include <QCoreApplication>
-#include <QStandardPaths>
+#include <QDebug>
 #include <QDir>
 #include <QSettings>
+#include <QStandardPaths>
 #include <QVariant>
 
-#include <QDebug>
+#include "action.h"
+#include "common.h"
 
 #define MIN_VERSION "0.8"
 
 NSettings *NSettings::m_instance = NULL;
 
-NSettings::NSettings(QObject *parent) : QSettings(NCore::settingsPath(), QSettings::IniFormat, parent)
+NSettings::NSettings(QObject *parent)
+    : QSettings(NCore::settingsPath(), QSettings::IniFormat, parent)
 {
     Q_ASSERT_X(!m_instance, "NSettings", "NSettings instance already exists.");
     m_instance = this;
@@ -43,7 +42,9 @@ NSettings::NSettings(QObject *parent) : QSettings(NCore::settingsPath(), QSettin
         setValue("SettingsVersion", MIN_VERSION);
     }
 
-    initValue("Shortcuts/PlayAction", QStringList() << "X" << "C" << "Space");
+    initValue("Shortcuts/PlayAction", QStringList() << "X"
+                                                    << "C"
+                                                    << "Space");
     initValue("Shortcuts/StopAction", "V");
     initValue("Shortcuts/PrevAction", "Z");
     initValue("Shortcuts/NextAction", "B");
@@ -58,10 +59,17 @@ NSettings::NSettings(QObject *parent) : QSettings(NCore::settingsPath(), QSettin
     initValue("Jump2", 30);
     initValue("Jump3", 180);
 
-    initValue("Shortcuts/FullScreenAction", "F11");
+    {
+        QStringList fullScreenKeys;
+        foreach (QKeySequence seq, QKeySequence::keyBindings(QKeySequence::FullScreen)) {
+            fullScreenKeys << seq.toString();
+        }
+        initValue("Shortcuts/FullScreenAction", fullScreenKeys);
+    }
 
     initValue("PlaylistTrackInfo", "%F (%d)");
-    initValue("WindowTitleTrackInfo","\"{%a - %t|%F}\" - " + QCoreApplication::applicationName() + " %v");
+    initValue("WindowTitleTrackInfo",
+              "\"{%a - %t|%F}\" - " + QCoreApplication::applicationName() + " %v");
     initValue("EncodingTrackInfo", "UTF-8");
     initValue("TooltipTrackInfo", "%C");
     initValue("TooltipOffset", QStringList() << QString::number(0) << QString::number(0));
@@ -84,6 +92,7 @@ NSettings::NSettings(QObject *parent) : QSettings(NCore::settingsPath(), QSettin
     initValue("LoopPlaylist", false);
     initValue("LoadNext", false);
     initValue("ShowCoverArt", true);
+    initValue("ShowPlaybackControls", true);
     initValue("LoadNextSort", QDir::Name);
     initValue("Volume", 0.8);
     initValue("ShowDecibelsVolume", false);
@@ -100,13 +109,13 @@ NSettings::NSettings(QObject *parent) : QSettings(NCore::settingsPath(), QSettin
 
     initValue("CustomTrash", false);
     initValue("CustomFileManager", false);
-    initValue("FileFilters", QString(
-        "*.m3u *.m3u8 \
+    initValue("FileFilters", QString("*.m3u *.m3u8 \
         *.mp3 *.ogg *.mp4 *.wma \
         *.flac *.ape *.wav *.wv *.tta \
         *.mpc *.spx *.opus \
         *.m4a *.aac *.aiff \
-        *.xm *.s3m *.it *.mod").simplified());
+        *.xm *.s3m *.it *.mod")
+                                 .simplified());
 
     initValue("TrackInfo/TopLeft", "{%B kbps/|}{%s kHz|}");
     initValue("TrackInfo/MiddleCenter", "{%a - %t|%F}");
@@ -118,10 +127,11 @@ NSettings::~NSettings()
     m_instance = NULL;
 }
 
-NSettings* NSettings::instance()
+NSettings *NSettings::instance()
 {
-    if (!m_instance)
+    if (!m_instance) {
         m_instance = new NSettings();
+    }
 
     return m_instance;
 }
@@ -129,8 +139,9 @@ NSettings* NSettings::instance()
 void NSettings::initShortcuts(QObject *instance)
 {
     foreach (NAction *action, instance->findChildren<NAction *>()) {
-        if (action->isCustomizable())
+        if (action->isCustomizable()) {
             m_actionList << action;
+        }
     }
 }
 
@@ -158,15 +169,17 @@ void NSettings::loadShortcuts()
 void NSettings::saveShortcuts()
 {
     foreach (NAction *action, m_actionList) {
-        if (action->objectName().isEmpty() || !action->isCustomizable())
+        if (action->objectName().isEmpty() || !action->isCustomizable()) {
             continue;
+        }
 
         QList<QKeySequence> localKeys = action->shortcuts();
         if (!localKeys.isEmpty()) {
             QStringList localsList;
             foreach (QKeySequence seq, localKeys) {
-                if (!seq.isEmpty())
+                if (!seq.isEmpty()) {
                     localsList << seq.toString();
+                }
             }
             setValue("Shortcuts/" + action->objectName(), localsList);
         } else {
@@ -177,8 +190,9 @@ void NSettings::saveShortcuts()
         if (!globalKeys.isEmpty()) {
             QStringList globalsList;
             foreach (QKeySequence seq, globalKeys) {
-                if (!seq.isEmpty())
+                if (!seq.isEmpty()) {
                     globalsList << seq.toString();
+                }
             }
             setValue("GlobalShortcuts/" + action->objectName(), globalsList);
         } else {
@@ -214,4 +228,3 @@ void NSettings::remove(const QString &key)
     QSettings::remove(key);
     emit valueChanged(key, QString());
 }
-

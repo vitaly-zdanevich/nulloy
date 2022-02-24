@@ -1,6 +1,6 @@
 /********************************************************************
 **  Nulloy Music Player, http://nulloy.com
-**  Copyright (C) 2010-2018 Sergey Vlasov <sergey@vlasov.me>
+**  Copyright (C) 2010-2022 Sergey Vlasov <sergey@vlasov.me>
 **
 **  This program can be distributed under the terms of the GNU
 **  General Public License version 3.0 as published by the Free
@@ -16,11 +16,11 @@
 #ifndef N_TAG_READER_TAGLIB_H
 #define N_TAG_READER_TAGLIB_H
 
+#include <fileref.h>
+#include <tag.h>
+
 #include "plugin.h"
 #include "tagReaderInterface.h"
-
-#include <tag.h>
-#include <fileref.h>
 
 class QString;
 
@@ -30,7 +30,10 @@ class NTagReaderTaglib : public NTagReaderInterface, public NPlugin
     Q_INTERFACES(NTagReaderInterface NPlugin)
 
 private:
-    QString parse(const QString &format, bool *success, const QString &encoding, bool stopOnFail = false) const;
+    void setSource(const QString &file);
+    bool isValid() const;
+    QString parse(const QString &format, bool *success, const QString &encoding,
+                  bool stopOnFail = false) const;
 
 public:
     NTagReaderTaglib(QObject *parent = 0) : NTagReaderInterface(parent) {}
@@ -40,11 +43,7 @@ public:
     QString interfaceString() const { return NTagReaderInterface::interfaceString(); }
     N::PluginType type() const { return N::TagReader; }
 
-    QString getSource();
-    void setSource(const QString &file);
-    QString toString(const QString &format, const QString &encoding) const;
-    bool isValid() const;
+    QString toString(const QString &file, const QString &format, const QString &encoding);
 };
 
 #endif
-

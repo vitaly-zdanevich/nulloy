@@ -1,6 +1,6 @@
 /********************************************************************
 **  Nulloy Music Player, http://nulloy.com
-**  Copyright (C) 2010-2018 Sergey Vlasov <sergey@vlasov.me>
+**  Copyright (C) 2010-2022 Sergey Vlasov <sergey@vlasov.me>
 **
 **  This program can be distributed under the terms of the GNU
 **  General Public License version 3.0 as published by the Free
@@ -16,8 +16,9 @@
 #ifndef N_PLAYER_H
 #define N_PLAYER_H
 
-#include <QWidget>
 #include <QSystemTrayIcon>
+#include <QWidget>
+
 #include "global.h"
 
 class NLogDialog;
@@ -79,6 +80,7 @@ private:
     NAction *m_addDirAction;
     NAction *m_savePlaylistAction;
     NAction *m_showCoverAction;
+    NAction *m_showPlaybackControlsAction;
     NAction *m_aboutAction;
     NAction *m_playingOnTopAction;
     NAction *m_alwaysOnTopAction;
@@ -108,8 +110,8 @@ public:
     NPlayer();
     ~NPlayer();
 
-    NMainWindow* mainWindow();
-    NPlaybackEngineInterface* playbackEngine();
+    NMainWindow *mainWindow();
+    NPlaybackEngineInterface *playbackEngine();
 
 private slots:
     void loadSettings();
@@ -155,4 +157,3 @@ public slots:
 };
 
 #endif
-

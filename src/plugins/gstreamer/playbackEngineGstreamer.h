@@ -1,6 +1,6 @@
 /********************************************************************
 **  Nulloy Music Player, http://nulloy.com
-**  Copyright (C) 2010-2018 Sergey Vlasov <sergey@vlasov.me>
+**  Copyright (C) 2010-2022 Sergey Vlasov <sergey@vlasov.me>
 **
 **  This program can be distributed under the terms of the GNU
 **  General Public License version 3.0 as published by the Free
@@ -16,11 +16,11 @@
 #ifndef N_PLAYBACK_ENGINE_GSTREAMER_H
 #define N_PLAYBACK_ENGINE_GSTREAMER_H
 
-#include "global.h"
-#include "plugin.h"
-#include "playbackEngineInterface.h"
-
 #include <gst/gst.h>
+
+#include "global.h"
+#include "playbackEngineInterface.h"
+#include "plugin.h"
 
 class QTimer;
 
@@ -89,4 +89,3 @@ signals:
 };
 
 #endif
-

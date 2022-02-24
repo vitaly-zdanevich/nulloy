@@ -1,6 +1,6 @@
 /********************************************************************
 **  Nulloy Music Player, http://nulloy.com
-**  Copyright (C) 2010-2018 Sergey Vlasov <sergey@vlasov.me>
+**  Copyright (C) 2010-2022 Sergey Vlasov <sergey@vlasov.me>
 **
 **  This program can be distributed under the terms of the GNU
 **  General Public License version 3.0 as published by the Free
@@ -28,14 +28,8 @@ struct NPlaylistDataItem
     float playbackPosition;
     QString titleFormat;
 
-    NPlaylistDataItem(const QString &file = "") :
-        path(file),
-        duration(-1),
-        failed(false),
-        playbackCount(0),
-        playbackPosition(0.0)
-    {};
+    NPlaylistDataItem(const QString &file = "")
+        : path(file), duration(-1), failed(false), playbackCount(0), playbackPosition(0.0){};
 };
 
 #endif
-

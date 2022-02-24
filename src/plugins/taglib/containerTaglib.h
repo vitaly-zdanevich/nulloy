@@ -1,6 +1,6 @@
 /********************************************************************
 **  Nulloy Music Player, http://nulloy.com
-**  Copyright (C) 2010-2018 Sergey Vlasov <sergey@vlasov.me>
+**  Copyright (C) 2010-2022 Sergey Vlasov <sergey@vlasov.me>
 **
 **  This program can be distributed under the terms of the GNU
 **  General Public License version 3.0 as published by the Free
@@ -32,8 +32,7 @@ public:
     ~NContainerTaglib();
     QList<NPlugin *> plugins() const;
     QString name() const { return "TagLib"; }
-    QString version() const { return "0.8.2"; }
+    QString version() const { return "0.9"; }
 };
 
 #endif
-

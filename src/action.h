@@ -1,6 +1,6 @@
 /********************************************************************
 **  Nulloy Music Player, http://nulloy.com
-**  Copyright (C) 2010-2018 Sergey Vlasov <sergey@vlasov.me>
+**  Copyright (C) 2010-2022 Sergey Vlasov <sergey@vlasov.me>
 **
 **  This program can be distributed under the terms of the GNU
 **  General Public License version 3.0 as published by the Free
@@ -17,6 +17,7 @@
 #define N_ACTION_H
 
 #include <QAction>
+
 #include "qxtglobalshortcut.h"
 
 class NAction : public QAction
@@ -27,7 +28,10 @@ class NAction : public QAction
 public:
     NAction(QObject *parent) : QAction(parent) { init(); }
     NAction(const QString &text, QObject *parent) : QAction(text, parent) { init(); }
-    NAction(const QIcon &icon, const QString &text, QObject *parent) : QAction(icon, text, parent) { init(); }
+    NAction(const QIcon &icon, const QString &text, QObject *parent) : QAction(icon, text, parent)
+    {
+        init();
+    }
 
     void setEnabled(bool enable);
     void setCustomizable(bool enable) { m_customizable = enable; }
@@ -45,4 +49,3 @@ private:
 };
 
 #endif
-

@@ -1,6 +1,6 @@
 /********************************************************************
 **  Nulloy Music Player, http://nulloy.com
-**  Copyright (C) 2010-2018 Sergey Vlasov <sergey@vlasov.me>
+**  Copyright (C) 2010-2022 Sergey Vlasov <sergey@vlasov.me>
 **
 **  This program can be distributed under the terms of the GNU
 **  General Public License version 3.0 as published by the Free
@@ -16,11 +16,13 @@
 #ifndef N_PLAYLIST_WIDGET_H
 #define N_PLAYLIST_WIDGET_H
 
-#include "global.h"
-#include <QListWidget>
 #include <QList>
+#include <QListWidget>
 #include <QPointer>
 
+#include "global.h"
+
+class NPlaylistDataItem;
 class NPlaylistWidgetItem;
 class NTagReaderInterface;
 class NPlaybackEngineInterface;
@@ -56,7 +58,7 @@ private:
     void resizeEvent(QResizeEvent *event);
     void setCurrentItem(NPlaylistWidgetItem *item);
     void activateItem(NPlaylistWidgetItem *item);
-    void formatItemTitle(NPlaylistWidgetItem *item, bool force = false);
+    void formatItemTitle(NPlaylistWidgetItem *item, QString titleFormat, bool force = false);
     void resetCurrentItem();
     bool revealInFileManager(const QString &file, QString *error) const;
 
@@ -77,7 +79,7 @@ public:
     NPlaylistWidget(QWidget *parent = 0);
     ~NPlaylistWidget();
 
-    NPlaylistWidgetItem* item(int row, bool loop = false) const;
+    NPlaylistWidgetItem *item(int row, bool loop = false) const;
 
     int currentRow() const;
     void setCurrentRow(int row);
@@ -94,8 +96,11 @@ public slots:
     void playRow(int row);
 
     void addFiles(const QStringList &files);
+    void addItems(const QList<NPlaylistDataItem> &dataItems);
     void setFiles(const QStringList &files);
+    void setItems(const QList<NPlaylistDataItem> &dataItems);
     void playFiles(const QStringList &files);
+    void playItems(const QList<NPlaylistDataItem> &dataItems);
     bool setPlaylist(const QString &file);
     void processVisibleItems();
 
@@ -112,11 +117,19 @@ signals:
     void shuffleModeChanged(bool enable);
     void repeatModeChanged(bool enable);
 
-// DRAG & DROP >>
+    // DRAG & DROP >>
 public:
-    enum DragStart { DragStartInside, DragStartOutside };
+    enum DragStart
+    {
+        DragStartInside,
+        DragStartOutside
+    };
     Q_ENUM(DragStart)
-    enum DropEnd { DropEndInside, DropEndOutside };
+    enum DropEnd
+    {
+        DropEndInside,
+        DropEndOutside
+    };
     Q_ENUM(DropEnd)
 private:
     DragStart m_dragStart;
@@ -125,17 +138,18 @@ private:
     bool m_fileDrop;
     QList<QUrl> m_mimeDataUrls;
     QStringList mimeTypes() const;
-    QMimeData* mimeData(const QList<QListWidgetItem *> items) const;
+    QMimeData *mimeData(const QList<QListWidgetItem *> items) const;
     bool dropMimeData(int index, const QMimeData *data, Qt::DropAction action);
+
 protected:
     void dropEvent(QDropEvent *event);
     void dragEnterEvent(QDragEnterEvent *event);
     void dragMoveEvent(QDragMoveEvent *event);
     void dragLeaveEvent(QDragLeaveEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
-// << DRAG & DROP
+    // << DRAG & DROP
 
-// STYLESHEET PROPERTIES >>
+    // STYLESHEET PROPERTIES >>
 private:
     QColor m_failedTextColor;
     QColor m_currentTextColor;
@@ -158,8 +172,7 @@ public:
 
     int fileDropRadius() const;
     void setFileDropRadius(int radius);
-// << STYLESHEET PROPERTIES
+    // << STYLESHEET PROPERTIES
 };
 
 #endif
-

@@ -1,6 +1,6 @@
 /********************************************************************
 **  Nulloy Music Player, http://nulloy.com
-**  Copyright (C) 2010-2018 Sergey Vlasov <sergey@vlasov.me>
+**  Copyright (C) 2010-2022 Sergey Vlasov <sergey@vlasov.me>
 **
 **  This program can be distributed under the terms of the GNU
 **  General Public License version 3.0 as published by the Free
@@ -16,20 +16,20 @@
 #ifndef N_COVER_READER_TAGLIB_H
 #define N_COVER_READER_TAGLIB_H
 
-#include "plugin.h"
-#include "coverReaderInterface.h"
-
 #include <apefile.h>
 #include <apetag.h>
 #include <asffile.h>
 #include <fileref.h>
 #include <flacfile.h>
 #include <id3v2tag.h>
-#include <mpcfile.h>
 #include <mp4file.h>
+#include <mpcfile.h>
 #include <mpegfile.h>
 #include <vorbisfile.h>
 #include <wavpackfile.h>
+
+#include "coverReaderInterface.h"
+#include "plugin.h"
 
 class NCoverReaderTaglib : public NCoverReaderInterface, public NPlugin
 {
@@ -59,4 +59,3 @@ public:
 };
 
 #endif
-

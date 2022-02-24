@@ -1,6 +1,6 @@
 /********************************************************************
 **  Nulloy Music Player, http://nulloy.com
-**  Copyright (C) 2010-2018 Sergey Vlasov <sergey@vlasov.me>
+**  Copyright (C) 2010-2022 Sergey Vlasov <sergey@vlasov.me>
 **
 **  This program can be distributed under the terms of the GNU
 **  General Public License version 3.0 as published by the Free
@@ -15,10 +15,10 @@
 
 #include "common.h"
 
-#include <QtCore>
 #include <QCoreApplication>
 #include <QDir>
 #include <QFileInfo>
+#include <QtCore>
 
 #ifdef Q_OS_WIN
 #include <QSettings>
@@ -32,9 +32,7 @@ namespace NCore
 
     static bool _rcDir_init = false;
     static QString _rcDir = "./";
-
-    static QStringList _processPath(const QString &path, const QStringList &nameFilters);
-}
+} // namespace NCore
 
 void NCore::cArgs(int *argc, const char ***argv)
 {
@@ -75,20 +73,25 @@ QString NCore::rcDir()
     if (!_rcDir_init) {
 #ifndef Q_OS_WIN
         QDir parentDir(QCoreApplication::applicationDirPath());
-        if (parentDir.dirName() == "bin")
+        if (parentDir.dirName() == "bin") {
             _rcDir = QDir::homePath() + "/.nulloy";
-        else
+        } else {
             _rcDir = QCoreApplication::applicationDirPath();
+        }
 #else
         QDir parentDir(QCoreApplication::applicationDirPath());
         parentDir.cdUp();
 
-        QSettings registryMachine("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion", QSettings::NativeFormat);
-        QDir programFilesDir(registryMachine.value("ProgramFilesDir", "C:/Program Files").toString());
-        QDir programFilesDirX86(registryMachine.value("ProgramFilesDir (x86)", "C:/Program Files (x86)").toString());
+        QSettings
+            registryMachine("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion",
+                            QSettings::NativeFormat);
+        QDir programFilesDir(
+            registryMachine.value("ProgramFilesDir", "C:/Program Files").toString());
+        QDir programFilesDirX86(
+            registryMachine.value("ProgramFilesDir (x86)", "C:/Program Files (x86)").toString());
 
         if (parentDir == programFilesDir || parentDir == programFilesDirX86) {
-            QString appData = QProcessEnvironment::systemEnvironment ().value("AppData");
+            QString appData = QProcessEnvironment::systemEnvironment().value("AppData");
             if (appData != "")
                 _rcDir = appData + "/Nulloy";
             else
@@ -98,36 +101,11 @@ QString NCore::rcDir()
         }
 #endif
         QDir dir(_rcDir);
-        if (!dir.exists())
+        if (!dir.exists()) {
             dir.mkdir(_rcDir);
+        }
 
         _rcDir_init = true;
     }
     return _rcDir;
-}
-
-QStringList NCore::_processPath(const QString &path, const QStringList &nameFilters)
-{
-    QStringList list;
-    QFileInfo fileinfo = QFileInfo(path);
-    if (fileinfo.isDir()) {
-        QStringList entryList;
-        if (!nameFilters.isEmpty())
-            entryList = QDir(path).entryList(nameFilters, QDir::AllDirs | QDir::Files | QDir::NoDotAndDotDot);
-        else
-            entryList = QDir(path).entryList(QDir::AllDirs | QDir::Files | QDir::NoDotAndDotDot);
-
-        foreach (QString f, entryList)
-            list << _processPath(path + "/" + f, nameFilters);
-    } else {
-        if (QDir::match(nameFilters, fileinfo.fileName()))
-            list << path;
-    }
-
-    return list;
-}
-
-QStringList NCore::dirListRecursive(const QString &path, const QStringList &nameFilters)
-{
-    return _processPath(path, nameFilters);
 }
